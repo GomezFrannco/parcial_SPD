@@ -10,7 +10,9 @@
 # define R_DISP A5 // display derecho
 # define INC_BTN 10 // boton de incremento
 # define DEC_BTN 9 // boton de decremento
-# define RES_BTN 8 // boton de reinicio
+# define SWITCH 8 // boton deslizante
+# define SENS_BTN 11 // boton para leer sensor
+# define SENSOR A3 // sensor de fuerza
 
 int counter;
 // arreglo con estados contra los cuales comparar
@@ -29,38 +31,77 @@ void setup()
   pinMode(R_DISP, OUTPUT);
   pinMode(INC_BTN, INPUT_PULLUP);
   pinMode(DEC_BTN, INPUT_PULLUP);
-  pinMode(RES_BTN, INPUT_PULLUP);
+  pinMode(SWITCH, INPUT_PULLUP);
+  pinMode(SENS_BTN, INPUT_PULLUP);
+  pinMode(SENSOR, INPUT);
   counter = 0;
 }
 
 void loop()
 {
+  // leyendo el sensor de fuerza
+  int readingSensor = analogRead(SENSOR);
+  // convirtiendo los valores recibidos del sensor
+  int newtonws = map(readingSensor, 0,827,0,10);
   // leyendo constantemente el estado actual de los pulsadores 
   int incCurrentState = digitalRead(INC_BTN);
   int decCurrentState = digitalRead(DEC_BTN);
-  int resCurrentState = digitalRead(RES_BTN);
-  // arreglo con los estados actuales
-  int btnStates[3] = {incCurrentState, decCurrentState, resCurrentState};
-  // al evaluar 3 pulsadores (incremento, decremento y reset), el for tiene 3 iteraciones
-  for (int i = 0; i < 3; i++)
+  int sensCurrentState = digitalRead(SENS_BTN);
+  int switchCurrentState = digitalRead(SWITCH);
+
+  // arreglo con los estados actuales de los pulsadores
+  int btnStates[3] = {incCurrentState, decCurrentState, sensCurrentState};
+  
+  if (switchCurrentState == 0) // cuando el switch no este activo (primera posición, contador de uno en uno)
   {
-    // se compara un cambio en el estado actual del pulsador (detecta un 0 en el pulsador) 
-    if(btnStates[i] != btnLastStates[i]) // linea 17
+    // al evaluar 3 pulsadores (incremento, decremento y el que activa el sensor), el for tiene 3 iteraciones
+    for (int i = 0; i < 3; i++)
     {
-      // si es 0 se presionó (pullup interno)
-      if (btnStates[i] == LOW)
+      // se compara un cambio en el estado actual del pulsador (detecta un 0 en el pulsador) 
+      if(btnStates[i] != btnLastStates[i]) // linea 19
       {
-        // (aumenta en 1, decrementa en 1, o establece en 0 el contador) solo se accede en caso de presionar el pulsador
-        handleCounter(i);
+        // si es 0 se presionó (pullup interno)
+        if (btnStates[i] == LOW)
+        {
+          // (aumenta en 1, decrementa en 1, o establece como -1 el contador) solo se accede en caso de presionar el pulsador
+          handleNormalCounter(i);
+        }
       }
     }
+    if (counter <  0) {
+      // cuando se presiona el botón n°3 (línea 282) se muestran los valores del sensor
+      handleDigits(newtonws);
+    }
+    else
+    {
+      // se muestra como el contador se incrementa o decrementa en 1
+      handleDigits(counter);
+    }
   }
-  // se los establece como iguales para realizar la comparación de la línea 48
+  else // cuando el switch esta activo (segunda posición, contador de numeros primos)
+  {
+    // al evaluar solo 2 pulsadores (incremento y decremento), el for tiene 2 iteraciones
+    for (int i = 0; i < 2; i++)
+    {
+      // se compara un cambio en el estado actual del pulsador (detecta un 0 en el pulsador) 
+      if(btnStates[i] != btnLastStates[i]) // linea 19
+      {
+        // si es 0 se presionó (pullup interno)
+        if (btnStates[i] == LOW)
+        {
+          // (aumenta o decrementa los numeros primos en el contador) solo al presionar el pulsador
+          handlePrimeCounter(i);
+        }
+      }
+    }
+    // se muestra como el contador se incrementa o decrementa mostrando solo números primos
+    handleDigits(counter);
+  }
+
+  // se los establece como iguales para la realizar la comparación de las líneas 61 y 87 
   btnLastStates[0] = incCurrentState;
   btnLastStates[1] = decCurrentState;
-  btnLastStates[2] = resCurrentState;
-  // se muestra en el display el numero actual del contador
-  handleDigits(counter);
+  btnLastStates[2] = sensCurrentState;
 }
 // funciones de prendido y apagado de pines (reusabilidad)
 void lightOn(int pin)
@@ -229,8 +270,8 @@ void handleDigits(int number)
   // 10 ms de retardo para apagar ambos de nuevo
   delay(10); // pocos ms para estabilidad visual
 }
-// determina que hacer con el contador al detectar los cambios de estados de los pulsadores
-void handleCounter(int btnIndex)
+// determina que hacer con el contador al detectar los cambios de estados de los pulsadores (switch en 0, línea 55)
+void handleNormalCounter(int btnIndex)
 {
   switch (btnIndex)
   {
@@ -246,8 +287,70 @@ void handleCounter(int btnIndex)
         counter--;
       }
       break;
-    case 2: // pulsador de reseteo
-      counter = 0;
+    case 2: // pulsador que activa la lectura del sensor
+      counter = -1;
       break;
+  }
+}
+// determina que hacer con el contador al detectar los cambios de estados de los pulsadores (switch en 1, línea 81)
+void handlePrimeCounter(int btnIndex)
+{
+  switch (btnIndex)
+  {
+    case 0: // pulsador de incremento
+      if (counter < 97)
+      {
+        counter++;
+        while (isPrime(counter) == false)
+        {
+          counter++;
+        }
+      }
+      break;
+    case 1: // pulsador de decremento
+      if (counter > 2)
+      {
+        counter--;
+        while (isPrime(counter) == false)
+        {
+          counter--;
+        }
+      }
+      break;
+  } 
+}
+// determina si un número es primo dividiendolo por los números que lo componen
+bool isPrime(int number)
+{
+  // cantidad de veces que una división dio resto 0
+  int count = 0;
+
+  // el numero no puede ser 0 ni 1
+  if (number > 1) {
+    for (int i = 0; i < number; i++) // cantidad de iteraciones igual al numero a determinar
+    {
+      int current = i + 1 ;
+      // comparo si el número a determinar tiene resto 0 dividiendolo por cada uno de los números que lo componen
+      if (number % current == 0)
+      {
+        // se agrega uno al contador para validar que se encontró una división de resto 0
+        count++;
+        if (count > 2)
+        {
+          // en caso de que hayan más de 2 divisiones, no es un número primo
+          return false;
+          break;
+        }
+      } 
+    }
+    if (count <= 2)
+    {
+      // si solo se registraron 2 divisiones, entonces es un número primo
+      return true;
+    }
+  }
+  else
+  {
+    return false;
   }
 }
