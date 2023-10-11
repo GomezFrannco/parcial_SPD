@@ -134,3 +134,16 @@ Finalmente se muestran el número del contador en el display.
   // se muestra en el display el numero actual del contador
   handleDigits(counter);
 ~~~
+## Proyecto: Fotorresistor (Parte 3)
+![Project](./img/Parcial_Parte-3_Franco-Gomez.png)
+## 🔗 Links al proyecto
+- [Tinkercad](https://www.tinkercad.com/things/3UlOjn3naip)
+- [Código](https://github.com/GomezFrannco/parcial_SPD/blob/main/code/part-3/parcial_parte-3.cc)
+
+## Descripción
+
+Para la parte 3 se agregó un nuevo componente al proyecto, el fotorresistor (i) (de acuerdo con la terminación del DNI, 0 en mi caso)
+
+![Components](./img/components_parte-3.png)
+
+En esta oportunidad, el fotoresistor es utilizado para bloquear o interferir con el uso de los pulsadores y el display. En caso de que el fotorresistor detecte menos del 70% de luz, los displays estarán apagados y no funcionaran los pulsadores. Caso contrario, si el fotorresistor recibe luz que sobrepase el 70% dejará que funcione todo correctamente.

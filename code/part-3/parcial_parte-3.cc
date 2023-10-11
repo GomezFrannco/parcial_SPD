@@ -55,7 +55,7 @@ void loop()
   // arreglo con los estados actuales de los pulsadores
   int btnStates[3] = {incCurrentState, decCurrentState, sensCurrentState};
   
-  if (resMap >= 7)
+  if (resMap >= 7) // solo funcionará cuando el valor del fotorresistor sea mayor a 7
   {
     if (switchCurrentState == 0) // cuando el switch no este activo (primera posición, contador de uno en uno)
     {
