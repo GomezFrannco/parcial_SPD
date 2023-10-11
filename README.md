@@ -10,8 +10,8 @@ Este repositorio contiene 2 proyectos (parte 1 y parte 2) que forman parte del p
 ## Proyecto: Contador 0 a 99 (Parte 1)
 ![Project](./img/Parcial_Parte-1_Franco-Gomez.png)
 ## 🔗 Links al proyecto
-- [Tinkercad](https://www.tinkercad.com/things/aOYiibnDjWu)
-- [Código]()
+- [Tinkercad](https://www.tinkercad.com/things/fr8l2XzCsWt)
+- [Código](https://github.com/GomezFrannco/parcial_SPD/blob/main/code/part-1/parcial_parte-1.cc)
 
 ## Descripción
 Esta primera parte del proyecto consta de la implementación de 2 displays de 7 segmentos multiplexados (i), 3 pulsadores (ii) y una placa de pruebas (iii).
@@ -78,8 +78,8 @@ void handleDigits(int number)
 ## Proyecto: Switch de Contador a Números Primos (Parte 2)
 ![Project](./img/Parcial_Parte-2_Franco-Gomez.png)
 ## 🔗 Links al proyecto
-- [Tinkercad](https://www.tinkercad.com/things/aOYiibnDjWu)
-- [Código]()
+- [Tinkercad](https://www.tinkercad.com/things/5QUxo1zWyx5)
+- [Código](https://github.com/GomezFrannco/parcial_SPD/blob/main/code/part-2/parcial_parte-2.cc)
 
 ## Descripción
 Para esta segunda parte se agrega un botón deslizante o switch (i), un motor de corriente continua (ii) y por ultimo, un sensor de fuerza (iii). También se modifica uno de los pulsadores (iv).
