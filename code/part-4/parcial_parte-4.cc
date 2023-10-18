@@ -390,7 +390,7 @@ void handleEvenCounter(int btnIndex)
       }
       break;
     case 1: // pulsador de decremento
-      if (counter > 1)
+      if (counter > 2)
       {
         counter--;
         while (isEven(counter) == false)
