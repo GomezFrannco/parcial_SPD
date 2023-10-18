@@ -147,3 +147,91 @@ Para la parte 3 se agregó un nuevo componente al proyecto, el fotorresistor (i)
 ![Components](./img/components_parte-3.png)
 
 En esta oportunidad, el fotoresistor es utilizado para bloquear o interferir con el uso de los pulsadores y el display. En caso de que el fotorresistor detecte menos del 70% de luz, los displays estarán apagados y no funcionaran los pulsadores. Caso contrario, si el fotorresistor recibe luz que sobrepase el 70% dejará que funcione todo correctamente.
+
+## Proyecto: Modificar Lógica (Parte 4)
+![Project](./img/Parcial_Parte-3_Franco-Gomez.png)
+## 🔗 Links al proyecto
+- [Tinkercad](https://www.tinkercad.com/things/dt0CtSJGEpq)
+- [Código](https://github.com/GomezFrannco/parcial_SPD/blob/main/code/part-4/parcial_parte-4.cc)
+
+## Descripción
+
+Basado en el ejercicio para los documentos que terminen entre 0 y 3, se identificaron las 2 funciones clave a modificar para conseguir el objetivo. Estas funciones fueron las siguientes:
+- handlePrimeCounter
+- isPrime 
+
+La primera de estas funciones estaba encargada de incrementar o decrementar el contador pero solo mostrando los números primo, dependiendo del pulsador presionado. La segunda función cumplia la tarea de verificar si un número, pasado por parámetro, es primo o no.
+
+Estas dos funciones fueron modificadas dando resultado a las siguientes dos funciones:
+- HandleEvenCounter
+- isEven
+
+Las dos funciones resultantes de la modificación a las anteriores permiten incrementar o decrementar el contador pero solo mostrando los números pares y verificar si un número es par.
+
+### Modificación de las funciones
+~~~ C (lenguaje en el que esta escrito)
+bool isEven(int number) // Antes llamada isPrime
+{
+  // NEW CODE
+  if (number % 2 == 0)
+  {
+    return true;
+  }
+  else
+  {
+  	return false;
+  }
+
+  // PREVIOUS CODE
+  /*int count = 0;
+  if (number > 1) {
+    for (int i = 0; i < number; i++)
+    {
+      int current = i + 1 ;
+      if (number % current == 0)
+      {
+        count++;
+        if (count > 2)
+        {
+          return false;
+          break;
+        }
+      } 
+    }
+    if (count <= 2)
+    {
+      return true;
+    }
+  }
+  else
+  {
+    return false;
+  }*/
+}
+void handleEvenCounter(int btnIndex)  // Antes llamada handlePrimeCounter
+{
+  switch (btnIndex)
+  {
+    case 0:
+      if (counter < 98) // Antes (counter < 97)
+      {
+        counter++;
+        while (isEven(counter) == false) // Anteriormente while (isPrime(counter) == false)
+        {
+          counter++;
+        }
+      }
+      break;
+    case 1:
+      if (counter > 2)
+      {
+        counter--;
+        while (isEven(counter) == false) // Anteriormente while (isPrime(counter) == false)
+        {
+          counter--;
+        }
+      }
+      break;
+  } 
+}
+~~~
