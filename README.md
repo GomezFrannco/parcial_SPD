@@ -19,8 +19,8 @@ Esta primera parte del proyecto consta de la implementación de 2 displays de 7 
 ![Components](./img/components_parte-1.png)
 
 Los displays se usan para mostrar un contador que inicia en 00 y termina en 99, los pulsadores son utilizados para:
-- incrementar el pulsador en 1
-- decrementar el pulsador en 1
+- incrementar el contador en 1
+- decrementar el contador en 1
 - volver el contador a 00
 
 Lo interesante de utilizar 2 displays multiplexados es que, además de compartir recursos, podemos representar 2 números; decena y unidad.
